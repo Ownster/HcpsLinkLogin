@@ -26,6 +26,10 @@ public class Login extends PageParse {
 		this.username = username;
 		this.password = password;
 	}
+	
+	public Login() {
+	    //Nothing
+	}
 
 	private void parseParams() {
 		status("Getting Params");

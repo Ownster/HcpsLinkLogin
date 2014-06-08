@@ -11,7 +11,7 @@ public class Main {
 			Login user = null;
 			if(new File("cookies.ser").exists()) {
 				CookieManager.readFile();
-				user = new Login("hcps-student","0000");
+				user = new Login();
 			}else{
 				if(user == null) {
 					String username, password = null;
