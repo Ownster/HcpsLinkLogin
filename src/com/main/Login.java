@@ -1,6 +1,9 @@
 package com.main;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 import org.jsoup.Connection;
@@ -47,21 +50,25 @@ public class Login extends PageParse {
 	}
 
 	public void login() {
-		try{
-			parseParams();
-			status("Posting...");
-			Connection.Response res = Jsoup.connect(loginurl).data(params).userAgent(Constants.user_agent).method(Method.POST).execute();
-			String body = res.body();
-			if(body.contains("Your login attempt was not successful. Please try again.")) {
-				status("Your login attempt was not successful. Please try again.");
+		if(new File("cookies.ser").exists()) {
+			CookieManager.readFile();
+		}else{
+			try{
+				parseParams();
+				status("Posting...");
+				Connection.Response res = Jsoup.connect(loginurl).data(params).userAgent(Constants.user_agent).method(Method.POST).execute();
+				String body = res.body();
+				if(body.contains("Your login attempt was not successful. Please try again.")) {
+					status("Your login attempt was not successful. Please try again.");
+					System.exit(0);
+				}else if(body.contains("<div id=\"welcome\">")) {
+					status("Correct Login");
+					CookieManager.setCookies(res.cookies(), false);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
 				System.exit(0);
-			}else if(body.contains("<div id=\"welcome\">")) {
-				status("Correct Login");
-				CookieManager.setCookies(res.cookies());
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.exit(0);
 		}
 
 	}
