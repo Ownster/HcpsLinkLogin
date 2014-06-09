@@ -30,12 +30,13 @@ public class Main {
 					}
 					user = new Login(username, password);
 					scanner.close();
+					user.login();
 				}
 			}
-			user.login();
 			user.getNotices();
 			user.getAttendance();
 			user.getClassNames();
+			user.getSchoolInfo();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

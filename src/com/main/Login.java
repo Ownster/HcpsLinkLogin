@@ -26,9 +26,9 @@ public class Login extends PageParse {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	public Login() {
-	    //Nothing
+		//Nothing
 	}
 
 	private void parseParams() {
@@ -54,26 +54,23 @@ public class Login extends PageParse {
 	}
 
 	public void login() {
-		if(new File("cookies.ser").exists()) {
-			CookieManager.readFile();
-		}else{
-			try{
-				parseParams();
-				status("Posting...");
-				Connection.Response res = Jsoup.connect(loginurl).data(params).userAgent(Constants.user_agent).method(Method.POST).execute();
-				String body = res.body();
-				if(body.contains("Your login attempt was not successful. Please try again.")) {
-					status("Your login attempt was not successful. Please try again.");
-					System.exit(0);
-				}else if(body.contains("<div id=\"welcome\">")) {
-					status("Correct Login");
-					CookieManager.setCookies(res.cookies(), false);
-				}
-			}catch(Exception e) {
-				e.printStackTrace();
+		try{
+			parseParams();
+			status("Posting...");
+			Connection.Response res = Jsoup.connect(loginurl).data(params).userAgent(Constants.user_agent).method(Method.POST).execute();
+			String body = res.body();
+			if(body.contains("Your login attempt was not successful. Please try again.")) {
+				status("Your login attempt was not successful. Please try again.");
 				System.exit(0);
+			}else if(body.contains("<div id=\"welcome\">")) {
+				status("Correct Login");
+				CookieManager.setCookies(res.cookies(), true);
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.exit(0);
 		}
+
 
 	}
 
