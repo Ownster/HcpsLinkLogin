@@ -35,8 +35,8 @@ public class Main {
 			}
 			user.getNotices();
 			user.getAttendance();
-			user.getClassNames();
 			user.getSchoolInfo();
+			user.getGradesPeriod(3);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
