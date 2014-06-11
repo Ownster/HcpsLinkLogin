@@ -56,12 +56,17 @@ public class PageParse {
 		}
 	}
 
-	private void getClasses() {
+	public void getClasses() {
 		createConnection("GradesView");
 		Element form = doc.select("select").get(1);
 		Elements options = form.getElementsByTag("option");
 		for (Element option : options) {
-			Classes[Integer.valueOf(option.attr("value"))] = option.html();
+			Classes[Integer.valueOf(option.attr("value"))] = option.html().replace("&amp;", "&");
+		}
+		for (int i = 0; i < Classes.length; i++) {
+			if(!(Classes[i] == null)) {
+				System.out.println("Class "+i+"-"+Classes[i]);
+			}
 		}
 	}
 
@@ -88,7 +93,11 @@ public class PageParse {
 			doc = Jsoup.parse(res.body());
 
 			System.out.println("Class Name: "+Classes[i]);
+
+			System.out.println("Teacher: "+doc.getElementById("ctl00_ContentPlaceHolder1_lblTeacherName").html());
 			
+			System.out.println(doc.getElementById("ctl00_ContentPlaceHolder1_lblLastUpdated").html());
+
 			Element table = doc.select("tbody").get(3);
 			for (Element row : table.select("tr")) {
 				Elements tds = row.select("td");
